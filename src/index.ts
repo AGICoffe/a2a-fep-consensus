@@ -230,5 +230,5 @@ const server = createServer(async (nodeReq, nodeRes) => {
 });
 
 server.listen(PORT, '0.0.0.0', () => {
-  console.error(...);
+  console.error("Server running on port 8080");
 });
