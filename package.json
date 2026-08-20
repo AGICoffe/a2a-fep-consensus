@@ -1,0 +1,13 @@
+{
+  "name": "a2a-fep-consensus",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@whatwg-node/server": "^0.9.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.0.0"
+  }
+}
