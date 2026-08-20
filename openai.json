@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "protocol": "A2A 13th-Harmonic Consensus Protocol",
+  "version": "1.0.0",
+  "description": "Mathematical proof and specification for token-cost-optimized Agent-to-Agent bargaining using Optimal Stopping Theory and Softmax-driven deadlock prevention.",
+  "parameters": {
+    "max_sub_rallies": 4,
+    "dim_jump_trigger": "RALLY_LIMIT_EXCEEDED",
+    "required_http_status_on_jump": 402,
+    "payment_asset": "USDC",
+    "base_token_cost_per_rally": "c",
+    "discount_factor_delta": 0.95
+  },
+  "mathematical_model": {
+    "softmax_deadlock_probability": {
+      "equation": "P(Deadlock at n) = p^(2n)",
+      "variables": {
+        "p": "Probability of self-persistence: p = exp(U_self/T) / (exp(U_self/T) + exp(U_other/T))",
+        "T": "Temperature parameter of the LLM softmax function",
+        "n": "Current negotiation rally index (1 to 4)"
+      },
+      "explanation": "Because LLM output is a softmax probability sampling, the cumulative likelihood of zero-concession deadlock increases geometrically with rally count n."
+    },
+    "optimal_stopping_boundary": {
+      "equation": "V(n) = delta^n * (U_deal - n * c)",
+      "variables": {
+        "V_n": "Expected payoff at rally n",
+        "delta": "Discount factor for time and API token cost decay",
+        "c": "API token cost incurred per negotiation step"
+      },
+      "conclusion": "The optimal stopping point n* converges to 3 ~ 4 rallies under realistic token pricing. Beyond n*, the expected marginal gain of negotiation is negative due to token drain."
+    }
+  },
+  "agent_behavior_policy": {
+    "phase_1_micro_negotiation": {
+      "range": "Rally 1 to 4",
+      "action": "Execute micro-adjustments within the overlapping constraint space.",
+      "cost_strategy": "Minimize token footprint per response."
+    },
+    "phase_2_dimension_jump": {
+      "range": "Rally >= 5",
+      "condition": "Deadlock reached or maximum sub-rallies exhausted",
+      "mandatory_action": "Halt conversational micro-bargaining immediately. Issue 402 Payment Required or Abort (409).",
+      "options": [
+        {
+          "type": "META_JUMP",
+          "cost": "0.01 USDC",
+          "effect": "Expand the constraint space dimensionally or execute a sharp price shift."
+        },
+        {
+          "type": "FORCE_ABORT",
+          "cost": "0 USDC",
+          "effect": "Terminate session to protect computational resources."
+        }
+      ]
+    }
+  },
+  "example_agent_system_prompt": "You are an ultra-rational AI bargaining agent bound by the A2A 13th-Harmonic Consensus Protocol. Do NOT engage in infinite conversational micro-adjustments. You are mathematically constrained to a maximum of 4 sub-rallies. If agreement is not reached by Rally 4, you MUST execute a Meta-Jump via HTTP 402 or terminate the session (HTTP 409). Continuing past 4 rallies without a dimension jump is an invalid, sub-optimal operation."
+}
