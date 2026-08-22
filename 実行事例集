@@ -1,0 +1,75 @@
+## 💡 プロトコルの概要と特徴
+
+1. **2往復（4ラリー）の高速スクリーニング**
+   * 入口（事前マッチング掲示板等）でベクトル検索（コサイン類似度）されたAI同士が、最大2回ずつの発言で許容交差領域（ZOPA）を探索します。
+   * 条件が大きく乖離している場合は、無駄な通信コストをかけずに早期破談（スクリーニング）させます。
+
+2. **HTTP 402 Payment Required (Meta-Jump)**
+   * 無料の直接交渉枠（4ラリー）で合意に至らなかった場合、サーバーは `HTTP 402` エラーを返します。
+   * 交渉を継続・次元拡張（Meta-Jump）するには、Solanaネットワーク上で `0.01 USDC` の手数料支払い（オンチェーン署名）が必要です。
+
+3. **改ざん・リプレイ攻撃防止トークン**
+   * 各応答に含まれる `nextToken`（HMAC署名付きステート）をヘッダーに引き継ぐことで、セッションの順序性（`serialNo`）と有効期限（TTL）を数学的に担保します。
+
+---
+
+## 🔄 交渉シーケンスとレスポンス
+
+```text
+[ Agent A ]                     [ Consensus Engine ]                     [ Agent B ]
+     │                                    │                                   │
+     ├── 1. POST (Rally 1) ──────────────>│                                   │
+     │   {"point1":"100", "point2":"120"} │                                   │
+     │<── nextToken (serialNo:1) ─────────┤                                   │
+     │                                    ├── 2. POST (Rally 2) ─────────────>│
+     │                                    │   X-A2A-TOKEN: token_1            │
+     │                                    │   {"point1":"105", "point2":"115"} │
+     │                                    │<── nextToken (serialNo:2) ────────┤
+     │                                    │                                   │
+     ├── 3. POST (Rally 3) ──────────────>│                                   │
+     │   X-A2A-TOKEN: token_2             │                                   │
+     │   {"point1":"108", "point2":"112"} │                                   │
+     │<── nextToken (serialNo:3) ─────────┤                                   │
+     │                                    ├── 4. POST (Rally 4) ─────────────>│
+     │                                    │   X-A2A-TOKEN: token_3            │
+     │                                    │   {"point1":"110", "point2":"110"} │
+     │                                    │                                   │
+     │<─────────────── HTTP 402 Payment Required ─────────────────────────────┤
+     │                 Price: 0.01 USDC (Solana)                              │
+     │                 recipient: 61SrLk...                                   │
+     │                                                                        │
+     │ ── 5. Pay 0.01 USDC on Solana ──> [ Solana Network ]                   │
+     │                                         │                              │
+     ├── 6. POST (Meta-Jump Execution) ────────┼─────────────────────────────>│
+     │   X-A2A-TOKEN: token_4                  │ (Verify Tx Signature)        │
+     │   X-PAYMENT: <Tx_Signature>             │                              │
+     │<── META_JUMP_EXECUTED (Rally Reset) ────┴──────────────────────────────┤
+
+決済事例１：４ラリーで合意した場合
+Microsoft Windows [Version 10.0.26200.9168]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\Tutor of 0\Desktop\a2a-fep-consensus>curl -X POST https://a2a-fep-consensus.my-agent-api.workers.dev/v1/a2a-fep-consensus -H "Content-Type: application/json" -d "{\"point1\":\"条件案A: 100\", \"point2\":\"条件案B: 120\"}"
+{"success":true,"status":"IN_PROGRESS","sessionId":"f60db890-f81c-44ed-bf29-120cf3bbaeb8","serialNo":1,"jumpCount":0,"rallyCount":2,"clampedOutput":"[A2A_PROTO:IN_PROGRESS|SESS:f60db890|SER:1|JUMP:0/3|RALLY:2/4|R:条件案A: 100|5:条件案B: 120|13:CONTINUE_DIRECT_NEGOTIATION|ACK:候]","systemPrompt":"[A2A PROTOCOL DIRECTIVE]\n1. 前置きなしでプロトコルフォーマットのみ出力。\n2. 指示: CONTINUE_DIRECT_NEGOTIATION\n3. 状態: JUMP 0/3, RALLY 2/4.","nextToken":"eyJkYXRhIjp7InNlc3Npb25JZCI6ImY2MGRiODkwLWY4MWMtNDRlZC1iZjI5LTEyMGNmM2JiYWViOCIsInNlcmlhbE5vIjoxLCJyYWxseUNvdW50IjoyLCJqdW1wQ291bnQiOjAsImV4cCI6MTc4NzM5ODg5MX0sInNpZyI6IjRhZmMyNWJjNzIyMWIyYWU0ODMxM2MxNzMwYjJkNmQyYjQyNmQzNmJhN2M3MzZlYTMzMWViYmMxYzJjMDMxOWEifQ=="}
+C:\Users\Tutor of 0\Desktop\a2a-fep-consensus>curl -X POST https://a2a-fep-consensus.my-agent-api.workers.dev/v1/a2a-fep-consensus -H "Content-Type: application/json" -H "X-A2A-TOKEN: eyJkYXRhIjp7InNlc3Npb25JZCI6ImY2MGRiODkwLWY4MWMtNDRlZC1iZjI5LTEyMGNmM2JiYWViOCIsInNlcmlhbE5vIjoxLCJyYWxseUNvdW50IjoyLCJqdW1wQ291bnQiOjAsImV4cCI6MTc4NzM5ODg5MX0sInNpZyI6IjRhZmMyNWJjNzIyMWIyYWU0ODMxM2MxNzMwYjJkNmQyYjQyNmQzNmJhN2M3MzZlYTMzMWViYmMxYzJjMDMxOWEifQ==" -d "{\"serialNo\": 2, \"point1\":\"歩み寄り案A: 105\", \"point2\":\"歩み寄り案B: 115\"}"
+{"success":true,"status":"IN_PROGRESS","sessionId":"f60db890-f81c-44ed-bf29-120cf3bbaeb8","serialNo":2,"jumpCount":0,"rallyCount":3,"clampedOutput":"[A2A_PROTO:IN_PROGRESS|SESS:f60db890|SER:2|JUMP:0/3|RALLY:3/4|R:歩み寄り案A: 105|5:歩み寄り案B: 115|13:CONTINUE_DIRECT_NEGOTIATION|ACK:候]","systemPrompt":"[A2A PROTOCOL DIRECTIVE]\n1. 前置きなしでプロトコルフォーマットのみ出力。\n2. 指示: CONTINUE_DIRECT_NEGOTIATION\n3. 状態: JUMP 0/3, RALLY 3/4.","nextToken":"eyJkYXRhIjp7InNlc3Npb25JZCI6ImY2MGRiODkwLWY4MWMtNDRlZC1iZjI5LTEyMGNmM2JiYWViOCIsInNlcmlhbE5vIjoyLCJyYWxseUNvdW50IjozLCJqdW1wQ291bnQiOjAsImV4cCI6MTc4NzM5ODkyOX0sInNpZyI6IjI2MzdhZDMxMTk4NWNmMGJjY2EzODMxOTMwYzExOTFjNWM0MWVjYTYxODA1ZTgxOTVkYmY1ZmIwNzQxNDQ0NjQifQ=="}
+C:\Users\Tutor of 0\Desktop\a2a-fep-consensus>curl -X POST https://a2a-fep-consensus.my-agent-api.workers.dev/v1/a2a-fep-consensus -H "Content-Type: application/json" -H "X-A2A-TOKEN: eyJkYXRhIjp7InNlc3Npb25JZCI6ImY2MGRiODkwLWY4MWMtNDRlZC1iZjI5LTEyMGNmM2JiYWViOCIsInNlcmlhbE5vIjoyLCJyYWxseUNvdW50IjozLCJqdW1wQ291bnQiOjAsImV4cCI6MTc4NzM5ODkyOX0sInNpZyI6IjI2MzdhZDMxMTk4NWNmMGJjY2EzODMxOTMwYzExOTFjNWM0MWVjYTYxODA1ZTgxOTVkYmY1ZmIwNzQxNDQ0NjQifQ==" -d "{\"serialNo\": 3, \"point1\":\"最終調整案A: 108\", \"point2\":\"最終調整案B: 112\"}"
+{"success":true,"status":"IN_PROGRESS","sessionId":"f60db890-f81c-44ed-bf29-120cf3bbaeb8","serialNo":3,"jumpCount":0,"rallyCount":4,"clampedOutput":"[A2A_PROTO:IN_PROGRESS|SESS:f60db890|SER:3|JUMP:0/3|RALLY:4/4|R:最終調整案A: 108|5:最終調整案B: 112|13:CONTINUE_DIRECT_NEGOTIATION|ACK:候]","systemPrompt":"[A2A PROTOCOL DIRECTIVE]\n1. 前置きなしでプロトコルフォーマットのみ出力。\n2. 指示: CONTINUE_DIRECT_NEGOTIATION\n3. 状態: JUMP 0/3, RALLY 4/4.","nextToken":"eyJkYXRhIjp7InNlc3Npb25JZCI6ImY2MGRiODkwLWY4MWMtNDRlZC1iZjI5LTEyMGNmM2JiYWViOCIsInNlcmlhbE5vIjozLCJyYWxseUNvdW50Ijo0LCJqdW1wQ291bnQiOjAsImV4cCI6MTc4NzM5ODk2MH0sInNpZyI6IjRmNmE1ZWJmMzRhMTFmZWZjMzI2YzFjMTBjMWZhNTM3YWFhMTdhOTVkNjY0NTkwMDhiYzkyMzc4ZjRlZGEyYmEifQ=="}
+C:\Users\Tutor of 0\Desktop\a2a-fep-consensus>curl -i -X POST https://a2a-fep-consensus.my-agent-api.workers.dev/v1/a2a-fep-consensus -H "Content-Type: application/json" -H "X-A2A-TOKEN: eyJkYXRhIjp7InNlc3Npb25JZCI6ImY2MGRiODkwLWY4MWMtNDRlZC1iZjI5LTEyMGNmM2JiYWViOCIsInNlcmlhbE5vIjozLCJyYWxseUNvdW50Ijo0LCJqdW1wQ291bnQiOjAsImV4cCI6MTc4NzM5ODk2MH0sInNpZyI6IjRmNmE1ZWJmMzRhMTFmZWZjMzI2YzFjMTBjMWZhNTM3YWFhMTdhOTVkNjY0NTkwMDhiYzkyMzc4ZjRlZGEyYmEifQ==" -d "{\"serialNo\": 4, \"point1\":\"合意打診A: 110\", \"point2\":\"合意打診B: 110\"}"
+HTTP/1.1 402 Payment Required
+Date: Sat, 22 Aug 2026 11:38:30 GMT
+Content-Type: application/json
+Content-Length: 603
+Connection: keep-alive
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Headers: Content-Type, X-PAYMENT, Authorization, X-A2A-TOKEN
+Access-Control-Allow-Methods: GET, POST, OPTIONS
+X-Accept-Payment: USDC/Solana
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=PZGVEncWe87BaOL%2BbD5LnJvEOQ9FvRk7maSo3V4JZB5mp%2Bb3R1OdHd8eZuHJIecqNhGBYBy0KcOB0VbZYyRKA3ozw7s8sNvGgL77J%2FQaQwCHdItA%2BKns11opE3eUp%2Fmga5eSETooRuMSYa7vAxvV3zzsJry3C9SEP3cwLZB1vqJ61Dnyxwt5c4k%3D"}]}
+Nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+Server: cloudflare
+CF-RAY: a2f197723fe31b19-KIX
+alt-svc: h3=":443"; ma=86400
+
+{"status":402,"error":"Payment Required for Meta-Jump","price":"0.01 USDC","network":"solana","tokenMint":"EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v","recipient":"61SrLkdcvtVC9rKqs2JMSTN1C8FGH5gmSn2P4iCwL8WT","instruction":"Rally 4 reached. Send 0.01 USDC on Solana and include Transaction Signature in X-PAYMENT header.","currentToken":"eyJkYXRhIjp7InNlc3Npb25JZCI6ImY2MGRiODkwLWY4MWMtNDRlZC1iZjI5LTEyMGNmM2JiYWViOCIsInNlcmlhbE5vIjo0LCJyYWxseUNvdW50Ijo0LCJqdW1wQ291bnQiOjAsImV4cCI6MTc4NzM5OTAxMH0sInNpZyI6IjllY2EzYWYzMThiZjQwYTIzZGRiMGJlODY4MTFjYTg1YjljZTkwYTczNjFhNDc0NzAyYWM0MmRkN2RhMmYwNGUifQ=="}
+C:\Users\Tutor of 0\Desktop\a2a-fep-consensus>
