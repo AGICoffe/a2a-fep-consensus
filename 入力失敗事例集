@@ -83,3 +83,22 @@ alt-svc: h3=":443"; ma=86400
 C:\Users\Tutor of 0\Desktop\a2a-fep-consensus>curl -X POST https://a2a-fep-consensus.my-agent-api.workers.dev/v1/a2a-fep-consensus -H "Content-Type: application/json" -H "X-A2A-TOKEN: eyJkYXRhIjp7InNlc3Npb25JZCI6IjRjNjljZThkLWUxYmYtNGE3OS1iY2Q4LWQ5NDg3MzUxN2VhZSIsInNlcmlhbE5vIjozLCJyYWxseUNvdW50Ijo0LCJqdW1wQ291bnQiOjAsImV4cCI6MTc4NzYzMjExNH0sInNpZyI6ImYzNzBlYzA4OTQxZDJhOTgyMDdiNGJjOWQxYjY0NTNmZjI4ZGFmZDVkNDRiY2NlOWUzYTA3NTI0ZjJlNmE3YzUifQ==" -H "X-PAYMENT: 2ofPoUo2AZVYcGfMt9TkkyUWYsGNMsn8Z1zC5E36KhvdvLTf3Xn5yKUh18WiR5eRhNKbFbMmPYeLNp4UaxgmeJeT" -d "{\"serialNo\": 5, \"point1\":\"次元拡張交渉案A: 110\", \"point2\":\"次元拡張交渉案B: 110\"}"
 {"success":false,"status":"INVALID_SERIAL_SEQUENCE","error":"Replay attack or sequence jump detected.","instruction":"Sequential token required."}
 C:\Users\Tutor of 0\Desktop\a2a-fep-consensus>
+
+メタ視点からの４０２決済実験
+C:\Users\Tutor of 0\Desktop\a2a-fep-consensus-meta-jump>curl -i -X POST https://a2a-fep-consensus-meta-jump.my-agent-api.workers.dev/v1/a2a-fep-consensus-meta-jump -H "Content-Type: application/json" -H "X-SOLANA-TX: 6RihXvxF6TYiyXwjoDk8Ug7pcZ8LYaWwEpT2jci6nRVkCfXcNRoJ84NSq5jrmT713x6TStE4bnjMMpT85mztHUV" -d "{\"point1\":\"価格100\", \"point2\":\"価格120\", \"history\":\"直接交渉で価格が折り合わず膠着状態\"}"
+HTTP/1.1 402 Payment Required
+Date: Tue, 25 Aug 2026 09:57:55 GMT
+Content-Type: application/json
+Content-Length: 264
+Connection: keep-alive
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Headers: Content-Type, X-A2A-TOKEN, X-SOLANA-TX
+Access-Control-Allow-Methods: GET, POST, OPTIONS
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=0gwBJvWkslNwk%2BFo2eI7Uk2quN%2FHB96iHlNAwUNXqprxzABQsAOez9uhRnv7a%2BCn%2FLU7pZ1hwRMh85Xpc71FZ87W67k9Y4p6rhT%2FnF6YpD3egBPG%2BuOvrWiuaV%2FODArzn%2F%2BzwTwTvuWQywNDhkl%2FxTfwp5umsGaAH%2FrIkxSVBpHZmLD2nwxbh8UH9q9clzcWJUXu"}]}
+Nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+Server: cloudflare
+CF-RAY: a309bc3e5aa5be79-KIX
+alt-svc: h3=":443"; ma=86400
+
+{"success":false,"status":"PAYMENT_REQUIRED","error":"402 Payment Required","debugReason":"INSUFFICIENT_USDC_DIFF: Received 0.009999999999999787, Need 0.01","paymentDetails":{"recipient":"61SrLkdcvtVC9rKqs2JMSTN1C8FGH5gmSn2P4iCwL8WT","amount":0.01,"asset":"USDC"}}
+C:\Users\Tutor of 0\Desktop\a2a-fep-consensus-meta-jump>npx wrangler deploy
