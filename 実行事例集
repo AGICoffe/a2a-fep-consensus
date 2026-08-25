@@ -139,3 +139,24 @@ alt-svc: h3=":443"; ma=86400
 C:\Users\Tutor of 0\Desktop\a2a-fep-consensus-meta-jump>
 
 
+合意
+の方法４０２決済込み
+C:\Users\Tutor of 0\Desktop\a2a-consensus-finalize>curl -i -X POST https://a2a-fep-consensus-finalize.my-agent-api.workers.dev/v1/a2a-fep-consensus-finalize -H "Content-Type: application/json" -H "X-SOLANA-TX: 5oK6UNVuBKNQYpVRsuHFduAXMRi8tGB9BYKjCYPyN4uRHxNjZnHwXi6uyZQgYX5evV6rU48nYpkWTzMjny9ptgKJ" -d "{\"finalPoint\":\"最終合意条件: 価格110 / 納期1ヶ月\", \"partyA\":\"Agent-Alpha\", \"partyB\":\"Agent-Beta\"}"
+HTTP/1.1 200 OK
+Date: Tue, 25 Aug 2026 10:49:08 GMT
+Content-Type: application/json
+Content-Length: 831
+Connection: keep-alive
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Headers: Content-Type, X-A2A-TOKEN, X-SOLANA-TX
+Access-Control-Allow-Methods: GET, POST, OPTIONS
+X-A2A-TOKEN: eyJkYXRhIjp7InNlc3Npb25JZCI6IjljM2UwZjllLTRlNjgtNGFmNS05M2YwLWRhMDQyOGRlMTg2NCIsImZpbmFsUG9pbnQiOiLmnIDntYLlkIjmhI/mnaHku7Y6IOS+oeagvDExMCAvIOe0jeacnzHjg7bmnIgiLCJwYXJ0eUEiOiJBZ2VudC1BbHBoYSIsInBhcnR5QiI6IkFnZW50LUJldGEiLCJzdGF0dXMiOiJBR1JFRU1FTlRfRklOQUxJWkVEIiwiZmluYWxpemVkQXQiOiIyMDI2LTA4LTI1VDEwOjQ5OjA4LjM3MloiLCJwYWlkIjp0cnVlLCJ0eXBlIjoiRklOQUxJWkUifSwic2lnIjoiMThkYWZiYjVjYzU5M2NkNDA5NzRjYTE3ZDBhNmU0ZDAwYzhjZTIyMjAyYmIxOTAzZWI2MGE2Y2UxODkxMmI4OSJ9
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=7ZBOXEHvfVbZcSlAFCuZoSpwc5rEUmP3mGeiuf93UJtXthWm5v2USqMS0RAwZRzVhhyL%2F5%2BOzYgUW8X8CIfoiXBGau7inC074DaktG3a%2BnLzZrIHd1sujmW8vrszaV9MXEHSG5%2FQzmdP2YhbKdfU8rR5weo8znjTFFHGGyMokD5%2Bs8cVVMjzbCzxd0R0z8g39O4%3D"}]}
+Nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+Server: cloudflare
+CF-RAY: a30a07424d568d0d-KIX
+alt-svc: h3=":443"; ma=86400
+
+{"success":true,"status":"AGREEMENT_FINALIZED","sessionId":"9c3e0f9e-4e68-4af5-93f0-da0428de1864","clampedOutput":"[A2A_FINALIZE:SUCCESS|SESS:9c3e0f9e|STATUS:FINALIZED|ACK:合意締結完了]","finalAgreement":{"finalPoint":"最終合意条件: 価格110 / 納期1ヶ月","partyA":"Agent-Alpha","partyB":"Agent-Beta","timestamp":"2026-08-25T10:49:08.372Z"},"receiptToken":"eyJkYXRhIjp7InNlc3Npb25JZCI6IjljM2UwZjllLTRlNjgtNGFmNS05M2YwLWRhMDQyOGRlMTg2NCIsImZpbmFsUG9pbnQiOiLmnIDntYLlkIjmhI/mnaHku7Y6IOS+oeagvDExMCAvIOe0jeacnzHjg7bmnIgiLCJwYXJ0eUEiOiJBZ2VudC1BbHBoYSIsInBhcnR5QiI6IkFnZW50LUJldGEiLCJzdGF0dXMiOiJBR1JFRU1FTlRfRklOQUxJWkVEIiwiZmluYWxpemVkQXQiOiIyMDI2LTA4LTI1VDEwOjQ5OjA4LjM3MloiLCJwYWlkIjp0cnVlLCJ0eXBlIjoiRklOQUxJWkUifSwic2lnIjoiMThkYWZiYjVjYzU5M2NkNDA5NzRjYTE3ZDBhNmU0ZDAwYzhjZTIyMjAyYmIxOTAzZWI2MGE2Y2UxODkxMmI4OSJ9"}
+C:\Users\Tutor of 0\Desktop\a2a-consensus-finalize>
+
