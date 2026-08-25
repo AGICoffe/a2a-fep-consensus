@@ -102,3 +102,22 @@ alt-svc: h3=":443"; ma=86400
 
 {"success":false,"status":"PAYMENT_REQUIRED","error":"402 Payment Required","debugReason":"INSUFFICIENT_USDC_DIFF: Received 0.009999999999999787, Need 0.01","paymentDetails":{"recipient":"61SrLkdcvtVC9rKqs2JMSTN1C8FGH5gmSn2P4iCwL8WT","amount":0.01,"asset":"USDC"}}
 C:\Users\Tutor of 0\Desktop\a2a-fep-consensus-meta-jump>npx wrangler deploy
+
+合意形成入力ミスのエラー
+
+C:\Users\Tutor of 0\Desktop\a2a-consensus-finalize>curl -i -X POST https://a2a-fep-consensus-finalize.my-agent-api.workers.dev/v1/a2a-fep-consensus-finalize -H "Content-Type: application/json" -d "{\"finalPoint\":\"最終合意条件: 価格110 / 納期1ヶ月\", \"partyA\":\"Agent-Alpha\", \"partyB\":\"Agent-Bet
+HTTP/1.1 402 Payment Required
+Date: Tue, 25 Aug 2026 10:48:05 GMT
+Content-Type: application/json
+Content-Length: 214
+Connection: keep-alive
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Headers: Content-Type, X-A2A-TOKEN, X-SOLANA-TX
+Access-Control-Allow-Methods: GET, POST, OPTIONS
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=BhK7PIgBve2EUiVviTLIVwKzKIDm%2FyYEUyhPz3VbagNlvsk7IOYeSmvOSgyHAoG%2F0yv10XS2Er86QXJnUnp22wRLlulXQeDWyiAhsE9S6riDUH2VghWYPedsQ1lfwyrO5ornTLAKkYnRlpFisakaVHidLNlT2UE34pVCOwd%2BSyCLwKaRhn8%3D"}]}
+Nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+Server: cloudflare
+CF-RAY: a30a05bd5a5352ae-KIX
+alt-svc: h3=":443"; ma=86400
+
+{"success":false,"status":"PAYMENT_REQUIRED","error":"402 Payment Required","debugReason":"NO_TX_PROVIDED","paymentDetails":{"recipient":"61SrLkdcvtVC9rKqs2JMSTN1C8FGH5gmSn2P4iCwL8WT","amount":0.01,"asset":"USDC"}}
