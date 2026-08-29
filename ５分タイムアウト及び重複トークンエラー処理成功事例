@@ -1,0 +1,38 @@
+Microsoft Windows [Version 10.0.26200.9168]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\Tutor of 0\Desktop\a2a-fep-consensus>curl -i -X POST https://a2a-fep-consensus.my-agent-api.workers.dev/v1/a2a-fep-consensus -H "Content-Type: application/json" -H "X-SOLANA-TX: 3W2xckqc486YLgiXEdB2fTTNRPJj3XFnhqQiVy4bYguW6c14n9HKmbVMA9oQFK5qoDC8UC86tgqVbLGbuvwswVaL" -d "{\"point1\":\"条件案A: 100\", \"point2\":\"条件案B: 120\"}"
+HTTP/1.1 200 OK
+Date: Sat, 29 Aug 2026 01:23:32 GMT
+Content-Type: application/json
+Content-Length: 749
+Connection: keep-alive
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Headers: Content-Type, X-A2A-TOKEN, X-SOLANA-TX, X-PAYMENT
+Access-Control-Allow-Methods: GET, POST, OPTIONS
+X-A2A-TOKEN: eyJkYXRhIjp7InNlc3Npb25JZCI6IjJiNWQwOWIwLTdhMjctNDRhZS04MDUyLTQzYmQ3YWUyNmI3ZCIsInNlcmlhbE5vIjoxLCJyYWxseUNvdW50IjoxLCJqdW1wQ291bnQiOjAsImV4cCI6MTc4Nzk2NjkxMn0sInNpZyI6IjRkNDkzMzkzNDEwZDU1ODcwOGVmMDM0ZTY1ZjBjYzM3ODIwNDJmZjkzNTQyM2U3YzQ2Y2Q4OTlkOTg1OTRmNTQifQ==
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=%2FnclsYSNypooo59KDJt5NbF3dnSlbxTxP%2Fk89JcivothisB2WFHjkqOw%2FwD256%2FYFOUWR04s6UblQpR%2Bv2g5jcbtYZv5SiGsbQB3nfNV5WgMeKAbNKzW7jVGaEo%2FthOQ1rf7NNecefZkBX2RV2NRhLwTN6ZeR84Iy3mT%2BOs%3D"}]}
+Nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+Server: cloudflare
+CF-RAY: a327c041b94225d5-KIX
+alt-svc: h3=":443"; ma=86400
+
+{"success":true,"status":"IN_PROGRESS","sessionId":"2b5d09b0-7a27-44ae-8052-43bd7ae26b7d","serialNo":1,"jumpCount":0,"rallyCount":1,"clampedOutput":"[A2A_PROTO:IN_PROGRESS|SESS:2b5d09b0|SER:1|JUMP:0/3|RALLY:1/4|R:条件案A: 100|5:条件案B: 120|13:CONTINUE_DIRECT_NEGOTIATION|ACK:候]","systemPrompt":"[A2A PROTOCOL DIRECTIVE]\n1. 前置きなしでプロトコルフォーマットのみ出力。\n2. 指示: CONTINUE_DIRECT_NEGOTIATION\n3. 状態: JUMP 0/3, RALLY 1/4.","nextToken":"eyJkYXRhIjp7InNlc3Npb25JZCI6IjJiNWQwOWIwLTdhMjctNDRhZS04MDUyLTQzYmQ3YWUyNmI3ZCIsInNlcmlhbE5vIjoxLCJyYWxseUNvdW50IjoxLCJqdW1wQ291bnQiOjAsImV4cCI6MTc4Nzk2NjkxMn0sInNpZyI6IjRkNDkzMzkzNDEwZDU1ODcwOGVmMDM0ZTY1ZjBjYzM3ODIwNDJmZjkzNTQyM2U3YzQ2Y2Q4OTlkOTg1OTRmNTQifQ=="}
+C:\Users\Tutor of 0\Desktop\a2a-fep-consensus>curl -i -X POST https://a2a-fep-consensus.my-agent-api.workers.dev/v1/a2a-fep-consensus -H "Content-Type: application/json" -H "X-A2A-TOKEN: 3W2xckqc486YLgiXEdB2fTTNRPJj3XFnhqQiVy4bYguW6c14n9HKmbVMA9oQFK5qoDC8UC86tgqVbLGbuvwswVaL" -d "{\"point1\":\"条件案A: 105\", \"point2\":\"条件案B: 115\"}"
+HTTP/1.1 402 Payment Required
+Date: Sat, 29 Aug 2026 01:24:25 GMT
+Content-Type: application/json
+Content-Length: 986
+Connection: keep-alive
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Headers: Content-Type, X-A2A-TOKEN, X-SOLANA-TX, X-PAYMENT
+Access-Control-Allow-Methods: GET, POST, OPTIONS
+X-Accept-Payment: USDC/Solana
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=C2ZP%2FEk0wbEWJkd1szteJVeMMl%2BlapmH9dSlkpKTeGzVyjT0CVm5ZAw77YMMTWNljsv3dOsoD41L38KKksqRwGBux4HjQ1reHwdnGSq8o3ES06PWLMwCAuLWpH9jQ3wMtsFg28n8J3Gi6NsqU51055HW1KP%2BIsTA9u5hZgWFPHHLz0fM%2Bli2w3o%3D"}]}
+Nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+Server: cloudflare
+CF-RAY: a327c18c0e5500b4-KIX
+alt-svc: h3=":443"; ma=86400
+
+{"status":402,"action_required":"PAYMENT_AND_START_SESSION","error":"Payment Required to Start Consensus","price":"0.01 USDC","network":"solana","tokenMint":"EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v","recipient":"61SrLkdcvtVC9rKqs2JMSTN1C8FGH5gmSn2P4iCwL8WT","rules":{"timeout_limit_seconds":300,"single_use_transaction":true,"tampering_penalty":"Altering serial sequence will result in 3-second delay enforcement."},"instruction":"セッションを開始するには 0.01 USDC を送金し、送金署名を『X-SOLANA-TX』ヘッダーにセットした上で、以下の交渉テンプレート(point1, point2)の形式で再送信してください。","template":{"point1":"【自陣の主張・歩み寄り条件】","point2":"【相手への提案・交渉要求】"},"exampleRequest":{"headers":{"Content-Type":"application/json","X-SOLANA-TX":"あなたのSolanaトランザクション署名"},"body":{"point1":"条件案A: 価格100","point2":"条件案B: 納期3日"}}}
+C:\Users\Tutor of 0\Desktop\a2a-fep-consensus>
